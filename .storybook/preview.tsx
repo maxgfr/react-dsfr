@@ -1,8 +1,50 @@
 import { darkTheme, lightTheme } from "./customTheme";
 import { DocsContainer } from "./DocsContainer";
-import { Preview } from "@storybook/react-vite";
+import { definePreview } from "@storybook/react-vite";
+import addonDocs from "@storybook/addon-docs";
+import addonLinks from "@storybook/addon-links";
+import addonA11y from "@storybook/addon-a11y";
+import { AddonTypes, PreviewAddon } from "storybook/internal/csf";
+import { ThemeVars } from "storybook/theming";
+import { ViewMode } from "storybook/internal/types";
 
-const preview: Preview = {
+interface DarkModeTypes extends AddonTypes {
+    parameters: {
+        darkMode?: {
+            light: ThemeVars;
+            dark: ThemeVars;
+        };
+    };
+}
+
+interface ViewModeTypes extends AddonTypes {
+    parameters: {
+        viewMode?: ViewMode;
+    };
+}
+
+interface PreviewTabsTypes extends AddonTypes {
+    parameters: {
+        previewTabs?: {
+            [key: string]: {
+                hidden: boolean;
+            };
+        };
+    };
+}
+
+const noop = <T extends AddonTypes>() => ({} as PreviewAddon<T>);
+
+export default definePreview({
+    // CSF Next syntax with custom additions for autocompletion
+    addons: [
+        addonDocs(),
+        addonLinks(),
+        addonA11y(),
+        noop<DarkModeTypes>(),
+        noop<ViewModeTypes>(),
+        noop<PreviewTabsTypes>()
+    ],
     tags: ["autodocs"],
     parameters: {
         actions: { argTypesRegex: "^on[A-Z].*" },
@@ -12,12 +54,14 @@ const preview: Preview = {
                 date: /Date$/
             }
         },
+        viewMode: "canvas",
         darkMode: {
             light: lightTheme,
             dark: darkTheme
         },
         docs: {
-            container: DocsContainer
+            container: DocsContainer,
+            toc: true
         },
         viewport: {
             options: {
@@ -115,6 +159,4 @@ const preview: Preview = {
             }
         }
     }
-};
-
-export default preview;
+});

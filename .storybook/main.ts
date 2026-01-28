@@ -1,13 +1,8 @@
-import { StorybookConfig } from "@storybook/react-vite";
+import { defineMain } from "@storybook/react-vite/node";
 
-export default {
-    framework: {
-        name: "@storybook/react-vite",
-        options: {}
-    },
+export default defineMain({
+    framework: "@storybook/react-vite",
     features: {
-        controls: true,
-        viewport: true,
         backgrounds: false
     },
     stories: [
@@ -23,4 +18,4 @@ export default {
         "@storybook/addon-docs"
     ],
     staticDirs: ["../dist", "./static"]
-} satisfies StorybookConfig;
+});
