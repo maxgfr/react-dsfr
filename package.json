@@ -23,6 +23,7 @@
         "format": "yarn _format --write",
         "format:check": "yarn _format --list-different",
         "storybook": "storybook dev -p 6006",
+        "storybook:dev": "storybook dev -p 6006",
         "build-storybook": "storybook build",
         "prestorybook": "yarn build && node dist/bin/react-dsfr update-icons",
         "prebuild-storybook": "yarn prestorybook"

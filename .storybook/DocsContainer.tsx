@@ -12,6 +12,7 @@ import { useIsDark } from "../dist/useIsDark";
 import { startReactDsfr } from "../dist/spa";
 import { fr } from "../dist/fr";
 import { MuiDsfrThemeProvider } from "../dist/mui";
+import { TableOfContentsCustom, TocType } from "./TableOfContents";
 
 startReactDsfr({
     "defaultColorScheme": "system",
@@ -27,6 +28,16 @@ export const DocsContainer = ({ children, context }: PropsWithChildren<DocsConta
     }, [isStorybookUiDark]);
 
     const backgroundColor = fr.colors.decisions.background.default.grey.default;
+
+    // took from addon-docs/src/blocks/DocsContainer.tsx
+    let toc: TocType | undefined;
+    try {
+        const meta = context.resolveOf("meta", ["meta"]);
+        toc = meta.preparedMeta.parameters?.docs?.toc;
+    } catch (err) {
+        // No meta, falling back to project annotations
+        toc = context?.projectAnnotations?.parameters?.docs?.toc;
+    }
 
     return (
         <>
@@ -54,7 +65,10 @@ export const DocsContainer = ({ children, context }: PropsWithChildren<DocsConta
             `}</style>
             <BaseContainer context={context} theme={isStorybookUiDark ? darkTheme : lightTheme}>
                 <MuiDsfrThemeProvider>
-                    <Unstyled>{children}</Unstyled>
+                    <Unstyled>
+                        {toc && <TableOfContentsCustom channel={context.channel} />}
+                        {children}
+                    </Unstyled>
                 </MuiDsfrThemeProvider>
             </BaseContainer>
         </>
