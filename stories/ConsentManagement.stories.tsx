@@ -1,5 +1,5 @@
 import React from "react";
-
+import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { createConsentManagement } from "../dist/consentManagement";
 import { defaultLocalStorageKeyPrefix } from "../dist/consentManagement/createConsentManagement";
@@ -9,6 +9,7 @@ import { Button } from "../dist/Button";
 import { fr } from "../dist/fr";
 
 const { meta, getStory } = getStoryFactory({
+    sectionName,
     "wrappedComponent": {
         "consentManagement": Story
     },
@@ -330,6 +331,6 @@ function Story() {
     );
 }
 
-export default { ...meta, title: "components/ConsentManagement" };
+export default meta;
 
 export const Default = getStory({});

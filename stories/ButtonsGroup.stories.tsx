@@ -1,10 +1,11 @@
 import { ButtonsGroup, type ButtonsGroupProps } from "../dist/ButtonsGroup";
-
+import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 
 const { meta, getStory } = getStoryFactory({
+    sectionName,
     "wrappedComponent": { ButtonsGroup },
     "description": `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/groupe-de-boutons)
@@ -88,14 +89,14 @@ const { meta, getStory } = getStoryFactory({
         },
         "buttons": {
             "description": `An array of ButtonProps (at least 1)`,
-            "control": false
+            "control": { "type": null }
         }
     },
     "disabledProps": ["lang"],
     "defaultContainerWidth": 800
 });
 
-export default { ...meta, title: "components/ButtonsGroup" };
+export default meta;
 
 export const Default = getStory({
     "buttons": [

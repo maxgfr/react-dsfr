@@ -1,9 +1,10 @@
 import { Tag, type TagProps } from "../dist/Tag";
-
+import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { assert, Equals } from "tsafe/assert";
 
 const { meta, getStory } = getStoryFactory({
+    sectionName,
     "wrappedComponent": { Tag },
     "description": `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/tag)
@@ -32,7 +33,7 @@ const { meta, getStory } = getStoryFactory({
         "nativeButtonProps": {
             "description": `Can be used to attach extra props to the underlying native button.  
             Example: \`{ "aria-controls": "fr-modal-1", onMouseEnter: event => {...} }\``,
-            "control": false
+            "control": { "type": null }
         },
 
         "as": {
@@ -49,13 +50,13 @@ const { meta, getStory } = getStoryFactory({
         },
         "children": {
             "description": "The label of the button",
-            "control": { "type": "text" }
+            "control": { "type": "string" }
         }
     },
     "disabledProps": ["lang"]
 });
 
-export default { ...meta, title: "components/Tag" };
+export default meta;
 
 export const Default = getStory({
     "children": "Label tag"

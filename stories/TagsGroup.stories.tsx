@@ -1,9 +1,10 @@
 import { TagsGroup, TagsGroupProps } from "../dist/TagsGroup";
-
+import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { TagProps } from "../dist/Tag";
 
 const { meta, getStory } = getStoryFactory({
+    sectionName,
     "wrappedComponent": { TagsGroup },
     "description": `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/tag)
@@ -17,14 +18,14 @@ const { meta, getStory } = getStoryFactory({
         },
         "tags": {
             "description": `An array of TagProps (at least 1, max recommended: 6).`,
-            "control": false
+            "control": { "type": null }
         }
     },
     "disabledProps": ["lang"],
     "defaultContainerWidth": 800
 });
 
-export default { ...meta, title: "components/TagsGroup" };
+export default meta;
 
 const tagsWithProps = (props?: Omit<TagProps, "children">) =>
     Array.from(

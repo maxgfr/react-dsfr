@@ -1,11 +1,12 @@
 import React from "react";
 import { Select, type SelectProps } from "../dist/Select";
-
+import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 
 const { meta, getStory } = getStoryFactory({
+    sectionName,
     "wrappedComponent": { Select },
     "description": `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/liste-deroulante)
@@ -73,16 +74,13 @@ function MyComponent(){
 
 `,
     "argTypes": {
-        "label": {
-            "control": { "type": "text" }
-        },
         "nativeSelectProps": {
             "description": "The props that you would pass to a native `<select />`",
-            "control": false
+            "control": { "type": null }
         },
         "children": {
             "description": "The `children` that you would give a native `<select />`",
-            "control": false
+            "control": { "type": null }
         },
         "disabled": {
             "control": { "type": "boolean" }
@@ -92,7 +90,7 @@ function MyComponent(){
         },
         "state": {
             "options": (() => {
-                const options = ["success", "error", "info", "default"] as const;
+                const options = ["success", "error", "default"] as const;
 
                 assert<Equals<typeof options[number], NonNullable<SelectProps["state"]>>>();
 
@@ -108,7 +106,7 @@ function MyComponent(){
     "disabledProps": ["lang"]
 });
 
-export default { ...meta, title: "components/Select" };
+export default meta;
 
 export const Default = getStory({
     "label": "Label pour liste déroulante",

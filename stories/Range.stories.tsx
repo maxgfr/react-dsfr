@@ -1,18 +1,16 @@
 import { Range, type RangeProps } from "../dist/Range";
-
+import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 
 const { meta, getStory } = getStoryFactory({
+    sectionName,
     wrappedComponent: { Range },
     description: `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/curseur-range)
 - [See source code](https://github.com/codegouvfr/react-dsfr/blob/main/src/Range.tsx)`,
     argTypes: {
-        label: {
-            control: { type: "text" }
-        },
         disabled: {
             control: { type: "boolean" }
         },
@@ -33,7 +31,7 @@ const { meta, getStory } = getStoryFactory({
         nativeInputProps: {
             description: `An object or an tuple of two objects that is forwarded as props to te underlying native \`<input />\` element(s).  
                 This is where you pass the \`name\` prop or \`onChange\` for example.`,
-            control: false
+            control: { "type": null }
         },
         small: {
             control: { type: "boolean" }
@@ -57,7 +55,7 @@ const { meta, getStory } = getStoryFactory({
     disabledProps: ["lang"]
 });
 
-export default { ...meta, title: "components/Range" };
+export default meta;
 
 const defaultProps = {
     label: "Label",

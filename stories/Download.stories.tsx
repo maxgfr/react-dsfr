@@ -1,8 +1,9 @@
 import { Download } from "../dist/Download";
-
+import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 
 const { meta, getStory } = getStoryFactory({
+    sectionName,
     "wrappedComponent": { Download },
     description: `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/telechargement-de-fichier)
@@ -13,15 +14,11 @@ const { meta, getStory } = getStoryFactory({
         },
         "details": {
             "description": `Required - informations about the file to download (size, format, etc.). `
-        },
-        "linkProps": {
-            "description": "Props passed to the anchor element",
-            "control": false
         }
     }
 });
 
-export default { ...meta, title: "components/Download" };
+export default meta;
 
 export const Default = getStory({
     "label": "Télécharger le document lorem ipsum sit dolores amet",

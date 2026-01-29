@@ -1,10 +1,11 @@
 import { Alert, type AlertProps } from "../dist/Alert";
-
+import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./getStory";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 
 const { meta, getStory } = getStoryFactory({
+    sectionName,
     "wrappedComponent": { Alert },
     "description": `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/alerte)
@@ -77,13 +78,13 @@ const [ isClosed, setIsClosed ] = useState(false);
                 this means that when the close button is clicked
                 the \`onClose()\` callback will be called but you are responsible
                 for setting \`isClosed\` to \`false\`, the \`<Alert />\` wont close itself.`,
-            "control": false
+            "control": { "type": null }
         }
     },
     "disabledProps": ["lang"]
 });
 
-export default { ...meta, title: "components/Alert" };
+export default meta;
 
 export const Default = getStory({
     "severity": "success",
