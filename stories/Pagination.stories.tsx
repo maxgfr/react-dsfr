@@ -1,8 +1,9 @@
 import { Pagination } from "../dist/Pagination";
-
+import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 
 const { meta, getStory } = getStoryFactory({
+    sectionName,
     "wrappedComponent": { Pagination },
     "description": `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/pagination)
@@ -11,7 +12,7 @@ const { meta, getStory } = getStoryFactory({
     "disabledProps": ["lang"]
 });
 
-export default { ...meta, title: "components/Pagination" };
+export default meta;
 
 export const Default = getStory({
     count: 100,

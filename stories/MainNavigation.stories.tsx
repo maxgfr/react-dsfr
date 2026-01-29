@@ -1,10 +1,11 @@
 import React from "react";
 import { Header } from "../dist/Header";
-
+import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import "./utils.css";
 
 const { meta, getStory } = getStoryFactory({
+    sectionName,
     "wrappedComponent": { "MainNavigation": Header },
     "description": `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/navigation-principale)
@@ -13,17 +14,17 @@ const { meta, getStory } = getStoryFactory({
 This component isn't meant to be used directly but via the [\\<Header \\/\\>](https://components.react-dsfr.codegouv.studio/?path=/docs/components-header)`,
     "argTypes": {
         "brandTop": {
-            "control": false
+            "control": { "type": null }
         },
         "homeLinkProps": {
-            "control": false
+            "control": { "type": null }
         }
     },
     "disabledProps": ["lang"],
     "doHideImportInstruction": true
 });
 
-export default { ...meta, title: "components/MainNavigation" };
+export default meta;
 
 export const DirectLinks = getStory({
     "brandTop": (

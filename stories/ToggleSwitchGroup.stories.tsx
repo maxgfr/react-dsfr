@@ -1,10 +1,11 @@
 import { ToggleSwitchGroup, type ToggleSwitchGroupProps } from "../dist/ToggleSwitchGroup";
-
+import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 
 const { meta, getStory } = getStoryFactory({
+    sectionName,
     "wrappedComponent": { ToggleSwitchGroup },
     "description": `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/interrupteur)
@@ -32,13 +33,13 @@ const { meta, getStory } = getStoryFactory({
         },
         "toggles": {
             "description": `An array of ToggleSwitchProps`,
-            "control": false
+            "control": { "type": null }
         }
     },
     "defaultContainerWidth": 800
 });
 
-export default { ...meta, title: "components/ToggleSwitchGroup" };
+export default meta;
 
 export const Default = getStory({
     "toggles": [

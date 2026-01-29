@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { SearchBar } from "../dist/SearchBar";
-
+import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import Autocomplete from "@mui/material/Autocomplete";
 import { cx } from "../dist/tools/cx";
 
 const { meta, getStory } = getStoryFactory({
+    sectionName,
     "wrappedComponent": { SearchBar },
     "description": `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/barre-de-recherche)
@@ -31,12 +32,12 @@ const { meta, getStory } = getStoryFactory({
         },
         "renderInput": {
             "description": `Optional: To control the input yourself`,
-            "control": false
+            "control": { "type": null }
         }
     }
 });
 
-export default { ...meta, title: "components/SearchBar" };
+export default meta;
 
 export const DefaultUncontrolled = getStory(
     {

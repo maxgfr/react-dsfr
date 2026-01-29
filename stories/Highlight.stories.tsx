@@ -1,10 +1,11 @@
 import { Highlight, type HighlightProps } from "../dist/Highlight";
-
+import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 
 const { meta, getStory } = getStoryFactory<HighlightProps>({
+    sectionName,
     wrappedComponent: { Highlight },
     description: `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/mise-en-exergue)
@@ -34,7 +35,7 @@ const { meta, getStory } = getStoryFactory<HighlightProps>({
     disabledProps: ["lang"]
 });
 
-export default { ...meta, title: "components/Highlight" };
+export default meta;
 
 export const Default = getStory({
     children:

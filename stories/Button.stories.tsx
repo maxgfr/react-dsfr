@@ -1,10 +1,11 @@
 import { Button, type ButtonProps } from "../dist/Button";
-
+import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./getStory";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 
 const { meta, getStory } = getStoryFactory({
+    sectionName,
     "wrappedComponent": { Button },
     "description": `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/bouton)
@@ -63,17 +64,17 @@ const { meta, getStory } = getStoryFactory({
         "nativeButtonProps": {
             "description": `Can be used to attach extra props to the underlying native button.  
             Example: \`{ "aria-controls": "fr-modal-1", onMouseEnter: event => {...} }\``,
-            "control": false
+            "control": { "type": null }
         },
         "children": {
             "description": "The label of the button",
-            "control": { "type": "text" }
+            "control": { "type": "string" }
         }
     },
     "disabledProps": ["lang"]
 });
 
-export default { ...meta, title: "components/Button" };
+export default meta;
 
 export const Default = getStory({
     "children": "Label button",

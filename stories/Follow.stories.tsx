@@ -1,9 +1,11 @@
 import { Follow, type FollowProps } from "../dist/Follow";
-
+import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
-import { action } from "storybook/actions";
+import { action } from "@storybook/addon-actions";
+import React from "react";
 
 const { meta, getStory } = getStoryFactory<FollowProps>({
+    sectionName,
     wrappedComponent: { Follow },
     description: `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/lettre-d-information-et-reseaux-sociaux)
@@ -11,23 +13,15 @@ const { meta, getStory } = getStoryFactory<FollowProps>({
 - [See source code](https://github.com/codegouvfr/react-dsfr/blob/main/src/Follow.tsx)`,
     argTypes: {
         classes: {
-            control: false,
+            control: { type: null },
             description:
                 'Add custom classes for various inner elements. Possible keys are "root", "container", "row", "newsletter-col", "newsletter", "newsletter-title", "newsletter-desc", "newsletter-form-wrapper", "newsletter-form-hint", "social-col", "social", "social-title", "social-buttons", "social-buttons-each"'
-        },
-        newsletter: {
-            control: false,
-            description: "Newsletter subscription section props"
-        },
-        social: {
-            control: false,
-            description: "Social media follow buttons section props"
         }
     },
     disabledProps: ["lang"]
 });
 
-export default { ...meta, title: "components/Follow" };
+export default meta;
 
 const defaultSocialButtons: [FollowProps.SocialButton, ...FollowProps.SocialButton[]] = [
     {

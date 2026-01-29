@@ -1,9 +1,11 @@
 import { Checkbox, type CheckboxProps } from "../dist/Checkbox";
+import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 
 const { meta, getStory } = getStoryFactory({
+    sectionName,
     "wrappedComponent": { Checkbox },
     "description": `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/case-a-cocher)
@@ -13,7 +15,7 @@ const { meta, getStory } = getStoryFactory({
             "description": `An array describing the checkbox options. 
             \`nativeInputProps\` is an object that you would pass as prop to \`<input type='checkbox' />\`, 
             this is where you define the value for each option`,
-            "control": false
+            "control": { "type": "null" }
         },
         "orientation": {
             "description": "Default: 'vertical'",
@@ -24,7 +26,7 @@ const { meta, getStory } = getStoryFactory({
 
                 return options;
             })(),
-            "control": { "type": "boolean" }
+            "control": { "type": "checkbox" }
         },
         "state": {
             "description": "Default: 'default'",
@@ -35,7 +37,7 @@ const { meta, getStory } = getStoryFactory({
 
                 return options;
             })(),
-            "control": { "type": "boolean" }
+            "control": { "type": "checkbox" }
         },
         "stateRelatedMessage": {
             "description": `The message won't be displayed if state is "default". 
@@ -52,7 +54,7 @@ const { meta, getStory } = getStoryFactory({
     "disabledProps": ["lang"]
 });
 
-export default { ...meta, title: "components/Checkbox" };
+export default meta;
 
 export const Default = getStory({
     "legend": "Légende pour l’ensemble des champs",

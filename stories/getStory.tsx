@@ -1,6 +1,7 @@
 import React, { useEffect, createContext, useContext } from "react";
-import type { ComponentType, ReactNode } from "react";
-import type { ArgTypes, Meta, StoryFn } from "@storybook/react-vite";
+import type { ReactNode } from "react";
+import type { Meta, Story } from "@storybook/react";
+import type { ArgType } from "@storybook/addons";
 import { symToStr } from "tsafe/symToStr";
 import { id } from "tsafe/id";
 import { useIsDark } from "../dist/useIsDark";
@@ -19,10 +20,11 @@ setUseLang({
 });
 
 export function getStoryFactory<Props extends Record<string, any>>(params: {
+    sectionName: string;
     description?: string;
-    wrappedComponent: Record<string, ComponentType<Props>>;
+    wrappedComponent: Record<string, (props: Props) => JSX.Element | null>;
     /** https://storybook.js.org/docs/react/essentials/controls */
-    argTypes?: ArgTypes<Props>;
+    argTypes?: Partial<Record<keyof Props, ArgType>>;
     defaultContainerWidth?: number | string;
     disabledProps?: ("containerWidth" | "lang" | "darkMode")[];
     /** Default false */
@@ -30,6 +32,7 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
     isChartComponent?: boolean;
 }) {
     const {
+        sectionName,
         wrappedComponent,
         description,
         argTypes = {},
@@ -43,21 +46,14 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
 
     document.documentElement.style.overflowY = "scroll";
 
-    type TemplateComponent = ComponentType<
+    const Template: Story<
         Props & {
             darkMode: boolean;
             containerWidth: number;
             isFirstStory: boolean;
-            lang: "fr" | "en" | "de";
+            lang: "fr" | "en" | "en" | "de";
         }
-    >;
-    const Template: StoryFn<TemplateComponent> = ({
-        darkMode,
-        containerWidth,
-        isFirstStory,
-        lang,
-        ...props
-    }) => {
+    > = ({ darkMode, containerWidth, isFirstStory, lang, ...props }) => {
         const { setIsDark } = useIsDark();
 
         useEffect(() => {
@@ -119,7 +115,7 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
         const { defaultContainerWidth: defaultContainerWidthStoryLevel, description } =
             params ?? {};
 
-        const out = (Template as Function).bind({});
+        const out = Template.bind({});
 
         out.args = {
             "darkMode": window.matchMedia("(prefers-color-scheme: dark)").matches,
@@ -148,6 +144,7 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
 
     return {
         "meta": id<Meta>({
+            "title": `${sectionName}/${componentName}`,
             "component": Component,
             "parameters": {
                 "docs": {

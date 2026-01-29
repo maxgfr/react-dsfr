@@ -1,6 +1,7 @@
 import { Card, type CardProps } from "../dist/Card";
 import { Badge } from "../dist/Badge";
 import { Tag } from "../dist/Tag";
+import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
@@ -10,6 +11,7 @@ import artworkOvoidSvgUrl from "../dist/dsfr/artwork/background/ovoid.svg";
 import artworkTechnicalErrorSvgUrl from "../dist/dsfr/artwork/pictograms/system/technical-error.svg";
 
 const { meta, getStory } = getStoryFactory({
+    sectionName,
     defaultContainerWidth: 360,
     "wrappedComponent": { Card },
     "description": `
@@ -112,7 +114,7 @@ const { meta, getStory } = getStoryFactory({
     "disabledProps": ["lang"]
 });
 
-export default { ...meta, title: "components/Card" };
+export default meta;
 
 const defaultProps = {
     "enlargeLink": true as const,

@@ -1,7 +1,9 @@
 import { GaugeChart, type GaugeChartProps } from "../../dist/Chart/GaugeChart";
 import { getStoryFactory } from "../getStory";
+import { sectionName } from "./sectionName";
 
 const { meta, getStory } = getStoryFactory<GaugeChartProps>({
+    sectionName: sectionName,
     "wrappedComponent": { GaugeChart },
     "description": `
 - [See DSFR documentation](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants-beta/graphiques-charts/)
@@ -31,7 +33,7 @@ You can find an example [here](https://github.com/codegouvfr/react-dsfr/blob/bc2
     isChartComponent: true
 });
 
-export default { ...meta, title: "charts/GaugeChart" };
+export default meta;
 
 export const Default = getStory({
     value: 16,
