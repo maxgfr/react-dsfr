@@ -1,0 +1,27 @@
+import React, { DetailedHTMLProps, InputHTMLAttributes, ReactNode } from "react";
+export type UploadProps = {
+    id?: string;
+    className?: string;
+    /** @default false */
+    disabled?: boolean;
+    hint?: ReactNode;
+    /** @default false */
+    multiple?: boolean;
+    label?: ReactNode;
+    /** @default "default" */
+    state?: "success" | "error" | "default";
+    /** The message won't be displayed if state is "default" */
+    stateRelatedMessage?: ReactNode;
+    /** Props forwarded to the underlying <input /> element */
+    nativeInputProps?: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+};
+export declare const Upload: React.MemoExoticComponent<React.ForwardRefExoticComponent<UploadProps & React.RefAttributes<HTMLDivElement>>>;
+declare const addUploadTranslations: (params: {
+    lang: string;
+    messages: Partial<{
+        "add file": string;
+        "add files": string;
+        hint: string;
+    }>;
+}) => void;
+export { addUploadTranslations };

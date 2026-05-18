@@ -1,0 +1,105 @@
+import React, { memo, forwardRef, type ReactNode, type CSSProperties } from "react";
+import { symToStr } from "tsafe/symToStr";
+import { assert } from "tsafe/assert";
+import type { Equals } from "tsafe";
+import type { FrClassName } from "./fr/generatedFromCss/classNames";
+import { cx } from "./tools/cx";
+import { fr } from "./fr";
+import { useAnalyticsId } from "./tools/useAnalyticsId";
+
+export type QuoteProps = {
+    id?: string;
+    className?: string;
+    text: ReactNode;
+    author?: ReactNode;
+    source?: ReactNode;
+    sourceUrl?: string;
+    imageUrl?: string;
+    size?: "medium" | "large" | "xlarge";
+    accentColor?: QuoteProps.AccentColor;
+    classes?: Partial<Record<"root" | "author" | "source" | "image" | "imageTag" | "text", string>>;
+    style?: CSSProperties;
+};
+
+export namespace QuoteProps {
+    type ExtractAccentColor<FrClassName> = FrClassName extends `fr-quote--${infer AccentColor}`
+        ? AccentColor
+        : never;
+
+    export type AccentColor = ExtractAccentColor<FrClassName>;
+}
+
+/** @see <https://components.react-dsfr.codegouv.studio/?path=/docs/components-quote> */
+export const Quote = memo(
+    forwardRef<HTMLDivElement, QuoteProps>((props, ref) => {
+        const {
+            id: id_props,
+            className,
+            text,
+            author,
+            source,
+            sourceUrl,
+            imageUrl,
+            size = "xlarge",
+            accentColor,
+            classes = {},
+            style,
+            ...rest
+        } = props;
+
+        assert<Equals<keyof typeof rest, never>>();
+
+        const id = useAnalyticsId({
+            "defaultIdPrefix": "fr-quote",
+            "explicitlyProvidedId": id_props
+        });
+
+        return (
+            <figure
+                id={id}
+                className={cx(
+                    fr.cx("fr-quote"),
+                    imageUrl && fr.cx("fr-quote--column"),
+                    accentColor && `fr-quote--${accentColor}`,
+                    classes.root,
+                    className
+                )}
+                style={style}
+                ref={ref}
+            >
+                <blockquote cite={sourceUrl}>
+                    <p
+                        className={cx(
+                            size === "large" && fr.cx("fr-text--lg"),
+                            size === "medium" && fr.cx("fr-text--md"),
+                            classes.text
+                        )}
+                    >
+                        « {text} »
+                    </p>
+                </blockquote>
+                <figcaption>
+                    {author !== undefined && (
+                        <p className={cx(fr.cx("fr-quote__author"), classes.author)}>{author}</p>
+                    )}
+                    {source !== undefined && (
+                        <ul className={cx(fr.cx("fr-quote__source"), classes.source)}>{source}</ul>
+                    )}
+                    {imageUrl !== undefined && (
+                        <div className={cx("fr-quote__image", classes.image)}>
+                            <img
+                                src={imageUrl}
+                                className={cx(fr.cx("fr-responsive-img"), classes.imageTag)}
+                                alt=""
+                            />
+                        </div>
+                    )}
+                </figcaption>
+            </figure>
+        );
+    })
+);
+
+Quote.displayName = symToStr({ Quote });
+
+export default Quote;

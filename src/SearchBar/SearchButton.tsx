@@ -1,0 +1,177 @@
+"use client";
+
+import React, { useEffect, useState, useReducer } from "react";
+import { useTranslation } from "./SearchBar";
+import { fr } from "../fr";
+import { assert, is } from "tsafe/assert";
+import { useConstCallback } from "../tools/powerhooks/useConstCallback";
+import { observeInputValue } from "../tools/observeInputValue";
+import { id } from "tsafe/id";
+
+export type SearchButtonProps = {
+    id: string;
+    searchInputId: string;
+    clearInputOnSearch: boolean;
+    allowEmptySearch: boolean;
+    onClick: ((text: string) => void) | undefined;
+};
+
+export function SearchButton(props: SearchButtonProps) {
+    const {
+        searchInputId,
+        clearInputOnSearch,
+        allowEmptySearch,
+        onClick: onClick_props,
+        id: id_props
+    } = props;
+
+    const { t } = useTranslation();
+
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
+
+    const [{ focusInputElement, getInputValue, resetInputValue, getIsInputFocused }, setInputApi] =
+        useState(() => ({
+            "getInputValue": id<() => string>(() => ""),
+            "resetInputValue": id<() => void>(() => {
+                /* do nothing */
+            }),
+            "focusInputElement": id<() => void>(() => {
+                /* do nothing */
+            }),
+            "getIsInputFocused": id<() => boolean>(() => false)
+        }));
+
+    const onClick = useConstCallback(() => {
+        const inputValue = getInputValue();
+
+        if (!allowEmptySearch && inputValue === "") {
+            focusInputElement();
+            return;
+        }
+
+        onClick_props?.(inputValue);
+        if (clearInputOnSearch) {
+            resetInputValue();
+        }
+    });
+
+    const isControlledByUser = onClick_props === undefined;
+
+    useEffect(() => {
+        const inputElement = document.getElementById(searchInputId);
+
+        assert(inputElement !== null, `${searchInputId} should be mounted`);
+        assert(
+            "value" in inputElement && typeof inputElement.value === "string",
+            `${searchInputId} is not an HTML input`
+        );
+
+        assert(is<HTMLInputElement>(inputElement));
+
+        setInputApi({
+            "focusInputElement": () => inputElement.focus(),
+            "getInputValue": () => inputElement.value,
+            "resetInputValue": () => (inputElement.value = ""),
+            "getIsInputFocused": () => document.activeElement === inputElement
+        });
+
+        const cleanups: (() => void)[] = [];
+
+        {
+            const { cleanup } = observeInputValue({
+                inputElement,
+                "callback": () => forceUpdate()
+            });
+
+            cleanups.push(cleanup);
+        }
+
+        if (isControlledByUser) {
+            inputElement.addEventListener(
+                "focus",
+                (() => {
+                    const callback = () => forceUpdate();
+
+                    cleanups.push(() => inputElement.removeEventListener("focus", callback));
+
+                    return callback;
+                })()
+            );
+
+            inputElement.addEventListener(
+                "blur",
+                (() => {
+                    const callback = () => forceUpdate();
+
+                    cleanups.push(() => inputElement.removeEventListener("blur", callback));
+
+                    return callback;
+                })()
+            );
+        }
+
+        if (!isControlledByUser) {
+            inputElement.addEventListener(
+                "keydown",
+                (() => {
+                    const callback = (event: KeyboardEvent): void => {
+                        if (event.key !== "Enter") {
+                            return;
+                        }
+
+                        onClick();
+                        inputElement.blur();
+                    };
+
+                    cleanups.push(() => inputElement.removeEventListener("keydown", callback));
+
+                    return callback;
+                })()
+            );
+
+            inputElement.addEventListener(
+                "keydown",
+                (() => {
+                    const callback = (event: KeyboardEvent) => {
+                        if (event.key !== "Escape") {
+                            return;
+                        }
+
+                        inputElement.blur();
+                    };
+
+                    cleanups.push(() => inputElement.removeEventListener("keydown", callback));
+
+                    return callback;
+                })()
+            );
+        }
+
+        return () => {
+            cleanups.forEach(cleanup => cleanup());
+        };
+    }, [searchInputId, isControlledByUser]);
+
+    if (onClick_props === undefined && (getIsInputFocused() || getInputValue() !== "")) {
+        return null;
+    }
+
+    return (
+        <button
+            id={id_props}
+            className={fr.cx("fr-btn")}
+            title={t("label")}
+            onClick={onClick}
+            style={
+                onClick_props !== undefined
+                    ? undefined
+                    : {
+                          "position": "absolute",
+                          "right": 0
+                      }
+            }
+        >
+            {t("label")}
+        </button>
+    );
+}

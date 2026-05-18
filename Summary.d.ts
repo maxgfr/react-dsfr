@@ -1,0 +1,27 @@
+import React, { type CSSProperties } from "react";
+import type { RegisteredLinkProps } from "./link";
+type Link = {
+    text: string;
+    linkProps: RegisteredLinkProps;
+    subLinks?: Link[];
+};
+export type SummaryProps = {
+    id?: string;
+    className?: string;
+    links: Link[];
+    title?: string;
+    /** Default: "p" */
+    as?: "p" | "h2" | "h3" | "h4" | "h5" | "h6";
+    classes?: Partial<Record<"root" | "title" | "link", string>>;
+    style?: CSSProperties;
+};
+/** @see <https://components.react-dsfr.codegouv.studio/?path=/docs/components-summary> */
+export declare const Summary: React.MemoExoticComponent<React.ForwardRefExoticComponent<SummaryProps & React.RefAttributes<HTMLDivElement>>>;
+declare const addSummaryTranslations: (params: {
+    lang: string;
+    messages: Partial<{
+        title: string;
+    }>;
+}) => void;
+export { addSummaryTranslations };
+export default Summary;
