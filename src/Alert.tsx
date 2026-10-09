@@ -74,9 +74,18 @@ export const Alert = memo(
             closable: isClosableByUser = false,
             isClosed: props_isClosed,
             onClose,
-            role = "alert",
+            role: roleFromProps,
             ...rest
         } = props;
+
+        // Honour explicit `role={undefined}` to opt out of the role attribute (RGAA 8.7).
+        // When role is omitted entirely, default to "alert" for screen reader announcements.
+        const role =
+            "role" in props
+                ? roleFromProps
+                : severity === "success" || severity === "info"
+                ? ("status" as const)
+                : ("alert" as const);
 
         assert<Equals<keyof typeof rest, never>>();
 
@@ -90,7 +99,6 @@ export const Alert = memo(
         const [buttonElement, setButtonElement] = useState<HTMLButtonElement | null>(null);
 
         const refShouldButtonGetFocus = useRef(false);
-        const refShouldSetRole = useRef(false);
         const DescriptionTag = typeof description === "string" ? "p" : "div";
 
         useEffect(() => {
@@ -100,7 +108,6 @@ export const Alert = memo(
             setIsClosed(isClosed => {
                 if (isClosed && !props_isClosed) {
                     refShouldButtonGetFocus.current = true;
-                    refShouldSetRole.current = true;
                 }
 
                 return props_isClosed;
@@ -147,8 +154,7 @@ export const Alert = memo(
                     className
                 )}
                 style={style}
-                {...(refShouldSetRole.current && { "role": role })}
-                {...(role ? { "role": role } : {})}
+                {...(role !== undefined ? { "role": role } : {})}
                 ref={ref}
                 {...rest}
             >
